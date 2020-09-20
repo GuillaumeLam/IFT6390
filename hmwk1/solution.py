@@ -121,7 +121,7 @@ print(er.hard_parzen(3))
 # Q2		DONE
 # Q3
 # Q4		DONE
-# Q5
+# Q5		DONE
 # Q5 report
 # Q6
 # Q7
