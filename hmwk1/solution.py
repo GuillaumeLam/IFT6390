@@ -106,5 +106,13 @@ X_test = [
 
 print(p.compute_predictions(X_test))
 
-t, v, s = split_dataset(banknote)
-print(len(t), len(v), len(s))
+# TODO:
+# Q1	DONE
+# Q2	DONE
+# Q3
+# Q4	DONE
+# Q5
+# Q6
+# Q7
+# Q8
+# Q9
