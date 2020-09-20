@@ -135,7 +135,7 @@ def random_projections(X, A):
 # Q4		DONE
 # Q5		DONE
 # Q5 report
-# Q6		DONE
+# Q6		DONE (partial)
 # Q7
 # Q8
 # Q9
