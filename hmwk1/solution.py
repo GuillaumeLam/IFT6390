@@ -102,17 +102,28 @@ class ErrorRate:
 
 
 def get_test_errors(banknote):
-	pass
+	train, val, test = split_dataset(banknote)
+
+	er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(val)[:,:-1], np.array(val)[:,-1])
+
+	hyperparam = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 3, 10, 20]
+	
+	hard_p_err = []
+	soft_p_err = []
+
+	for val in hyperparam:
+		hard_p_err.append(er.hard_parzen(val))
+		# soft_p_err.append(er.soft_parzen(val))
+
+	h_star = hyperparam[np.argmin(hard_p_err)]	
+	# s_star = hyperparam[np.argmin(soft_p_err)]
+	s_star = 0	
+
+	return [h_star, s_star]
 
 def random_projections(X, A):
 	pass
 
-
-train, val, test = split_dataset(banknote)
-
-er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(val)[:,:-1], np.array(val)[:,-1])
-
-print(er.hard_parzen(3))
 
 
 
@@ -124,7 +135,7 @@ print(er.hard_parzen(3))
 # Q4		DONE
 # Q5		DONE
 # Q5 report
-# Q6
+# Q6		DONE
 # Q7
 # Q8
 # Q9
