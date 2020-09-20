@@ -68,7 +68,10 @@ class SoftRBFParzen:
 
 
 def split_dataset(banknote):
-	pass
+	train = [line for i, line in enumerate(banknote) if (i%5 == 0 or i%5 == 1 or i%5 == 2)]
+	val = [line for i, line in enumerate(banknote) if (i%5 == 3)]
+	test = [line for i, line in enumerate(banknote) if (i%5 == 4)]
+	return (train,val,test)
 
 
 class ErrorRate:
@@ -102,3 +105,6 @@ X_test = [
 ]
 
 print(p.compute_predictions(X_test))
+
+t, v, s = split_dataset(banknote)
+print(len(t), len(v), len(s))
