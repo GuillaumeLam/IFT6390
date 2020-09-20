@@ -30,7 +30,6 @@ class Q1:
 		banknote = np.array([np.array(line) for line in banknote if line[-1] == 1])
 		return self.covariance_matrix(banknote)
 
-# for new data points, look at only points that are within h dist of new point and take majority vote
 class HardParzen:
 	def __init__(self, h):
 		self.h = h
@@ -82,10 +81,24 @@ class ErrorRate:
 		self.y_val = y_val
 
 	def hard_parzen(self, h):
-		pass
+		p = HardParzen(h)
+		p.train(self.x_train, self.y_train)
+
+		y_pred = p.compute_predictions(self.x_val)
+
+		res = np.array([0 if pred[0] == pred[1] else 1 for pred in zip(y_pred, self.y_val)])
+
+		return np.sum(res)/len(res)
 
 	def soft_parzen(self, sigma):
-		pass
+		p = SoftRBFParzen(sigma)
+		p.train(self.x_train, self.y_train)
+
+		y_pred = p.compute_predictions(self.x_val)
+
+		res = np.array([0 if pred[0] == pred[1] else 1 for pred in zip(y_pred, self.y_val)])
+
+		return np.sum(res)/len(res)
 
 
 def get_test_errors(banknote):
@@ -95,23 +108,21 @@ def get_test_errors(banknote):
 def random_projections(X, A):
 	pass
 
-p = HardParzen(3)
 
-p.train(banknote[:,:-1],banknote[:,-1])
+er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(val)[:,:-1], np.array(val)[:,-1])
 
-X_test = [
-	[-2,-1,2,-1],
-	[2,4,0,-1]
-]
+print(er.hard_parzen(3))
 
-print(p.compute_predictions(X_test))
+
+
 
 # TODO:
-# Q1	DONE
-# Q2	DONE
+# Q1		DONE
+# Q2		DONE
 # Q3
-# Q4	DONE
+# Q4		DONE
 # Q5
+# Q5 report
 # Q6
 # Q7
 # Q8
