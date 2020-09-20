@@ -30,19 +30,31 @@ class Q1:
 		banknote = np.array([np.array(line) for line in banknote if line[-1] ==1])
 		return self.covariance_matrix(banknote)
 
-
+# for new data points, look at only points that are within h dist of new point and take majority vote
 class HardParzen:
 	def __init__(self, h):
 		self.h = h
 
 	def train(self, train_inputs, train_labels):
-		# self.label_list = np.unique(train_labels)
-		pass
+		self.label_list = np.unique(train_labels)
+		self.train_data = np.append(np.array(train_inputs), np.transpose(np.array([train_labels])), axis=1)
 
 	def compute_predictions(self, test_data):
-		pass
+		Y_test = []
+		for X_test in test_data:
+			dist_h_points = []
+			for point in self.train_data:
+				if np.linalg.norm(point[:-1]-X_test) <= self.h:
+					dist_h_points.append(point[-1])
+			if not len(dist_h_points) == 0:
+				Y_test.append(np.argmax(np.bincount(dist_h_points)))
+			else: 
+				Y_test.append(draw_rand_label(X_test, self.label_list))
+
+		return Y_test
 
 
+# for new data points, take weighted vote of all data points with dist as weight factor ie. closer is weighted more 
 class SoftRBFParzen:
 	def __init__(self, sigma):
 		self.sigma  = sigma
@@ -81,4 +93,21 @@ def random_projections(X, A):
 	pass
 
 
-print(Q1().covariance_matrix_class_1(banknote))
+X = [
+	[1,2,3],
+	[1,3,3],
+	[1,2,4],
+	[4,5,7],
+	[4,5,6]
+]
+Y = [0,0,0,1,1]
+
+p = HardParzen(3)
+p.train(X, Y)
+
+X_test = [
+	[0,2,4],
+	[5,6,7]
+]
+
+print(p.compute_predictions(X_test))
