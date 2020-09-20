@@ -23,11 +23,11 @@ class Q1:
 		return np.cov(banknote)
 
 	def feature_means_class_1(self, banknote):
-		banknote = np.array([np.array(line) for line in banknote if line[-1] ==1])
+		banknote = np.array([np.array(line) for line in banknote if line[-1] == 1])
 		return self.feature_means(banknote)
 
 	def covariance_matrix_class_1(self, banknote):
-		banknote = np.array([np.array(line) for line in banknote if line[-1] ==1])
+		banknote = np.array([np.array(line) for line in banknote if line[-1] == 1])
 		return self.covariance_matrix(banknote)
 
 # for new data points, look at only points that are within h dist of new point and take majority vote
@@ -60,7 +60,7 @@ class SoftRBFParzen:
 		self.sigma  = sigma
 
 	def train(self, train_inputs, train_labels):
-		# self.label_list = np.unique(train_labels)
+		self.label_list = np.unique(train_labels)
 		pass
 
 	def compute_predictions(self, test_data):
@@ -92,22 +92,13 @@ def get_test_errors(banknote):
 def random_projections(X, A):
 	pass
 
-
-X = [
-	[1,2,3],
-	[1,3,3],
-	[1,2,4],
-	[4,5,7],
-	[4,5,6]
-]
-Y = [0,0,0,1,1]
-
 p = HardParzen(3)
-p.train(X, Y)
+
+p.train(banknote[:,:-1],banknote[:,-1])
 
 X_test = [
-	[0,2,4],
-	[5,6,7]
+	[-2,-1,2,-1],
+	[2,4,0,-1]
 ]
 
 print(p.compute_predictions(X_test))
