@@ -122,11 +122,31 @@ def get_test_errors(banknote):
 	return [h_star, s_star]
 
 def random_projections(X, A):
-	pass
+	proj_X = np.empty((0,2), int)
+	
+	for x in X: 
+		proj_X = np.append(proj_X, np.multiply(1/np.sqrt(2), np.array([np.dot(np.transpose(A),x)])), axis=0)
+		
+	return proj_X
 
 
 
+X = np.array([
+		[1, 2, 3, 4],
+		[1, 2, 3, 4],
+		[1, 2, 3, 4],
+		[1, 2, 3, 4],
+		[1, 2, 3, 4]
+	])
 
+A = np.array([
+		[1, 2],
+		[1, 2],
+		[1, 2],
+		[1, 2]
+	])
+
+print(random_projections(X, A))
 
 # TODO:
 # Q1		DONE
@@ -136,6 +156,6 @@ def random_projections(X, A):
 # Q5		DONE
 # Q5 report
 # Q6		DONE (partial)
-# Q7
-# Q8
-# Q9
+# Q7 report		
+# Q8		DONE
+# Q9		
