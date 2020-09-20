@@ -104,10 +104,11 @@ class ErrorRate:
 def get_test_errors(banknote):
 	pass
 
-
 def random_projections(X, A):
 	pass
 
+
+train, val, test = split_dataset(banknote)
 
 er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(val)[:,:-1], np.array(val)[:,-1])
 
