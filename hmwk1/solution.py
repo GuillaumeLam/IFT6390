@@ -78,7 +78,7 @@ class SoftRBFParzen:
 			w_y_sum = sum(w*y for w, y in kernel_dist)
 			w_sum = sum(w for w, _ in kernel_dist)
 
-			if w_y_sum/w_sum > 0:
+			if not w_sum == 0 and w_y_sum/w_sum > 0:
 				Y_test.append(1)
 			else:
 				Y_test.append(0)
@@ -133,11 +133,10 @@ def get_test_errors(banknote):
 
 	for val in hyperparam:
 		hard_p_err.append(er.hard_parzen(val))
-		# soft_p_err.append(er.soft_parzen(val))
+		soft_p_err.append(er.soft_parzen(val))
 
 	h_star = hyperparam[np.argmin(hard_p_err)]	
-	# s_star = hyperparam[np.argmin(soft_p_err)]
-	s_star = 0	
+	s_star = hyperparam[np.argmin(soft_p_err)]
 
 	return [h_star, s_star]
 
@@ -181,27 +180,7 @@ def get_test_projection_error(banknote):
 	return (hard_p_val, soft_p_val)
 
 
-X = [
-	[1,2,3],
-	[1,3,3],
-	[1,2,4],
-	[4,5,7],
-	[4,5,6]
-]
-Y = [0,0,0,1,1]
-
-p = SoftRBFParzen(3)
-p.train(X, Y)
-
-X_test = [
-	[0,2,4],
-	[5,6,7],
-	[3,4,5],
-	[9,7,10],
-	[20,2,15]
-]
-
-print(p.compute_predictions(X_test)) 
+print(get_test_errors(banknote))
 
 
 # TODO:
@@ -211,7 +190,7 @@ print(p.compute_predictions(X_test))
 # Q4		DONE
 # Q5		DONE
 # Q5 report
-# Q6		DONE (partial)
+# Q6		DONE
 # Q7 report		
 # Q8		DONE
 # Q9		DONE (partial)
