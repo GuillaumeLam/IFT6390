@@ -90,7 +90,7 @@ def split_dataset(banknote):
 	train = [line for i, line in enumerate(banknote) if (i%5 == 0 or i%5 == 1 or i%5 == 2)]
 	val = [line for i, line in enumerate(banknote) if (i%5 == 3)]
 	test = [line for i, line in enumerate(banknote) if (i%5 == 4)]
-	return (train,val,test)
+	return train,val,test 
 
 
 class ErrorRate:
@@ -135,8 +135,8 @@ def get_test_errors(banknote):
 		hard_p_err.append(er.hard_parzen(val))
 		soft_p_err.append(er.soft_parzen(val))
 
-	h_star = np.argmin(hard_p_err)
-	s_star = np.argmin(soft_p_err)
+	h_star = hard_p_err[np.argmin(hard_p_err)]
+	s_star = soft_p_err[np.argmin(soft_p_err)]
 
 	return [h_star, s_star]
 
@@ -181,6 +181,7 @@ def get_test_projection_error(banknote):
 
 	return (hard_p_val, soft_p_val)
 
+print(get_test_errors(banknote))
 
 # TODO:
 # Q1		DONE
