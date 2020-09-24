@@ -182,9 +182,6 @@ def get_test_projection_error(banknote):
 	return (hard_p_val, soft_p_val)
 
 
-print(get_test_projection_error(banknote))
-
-
 # TODO:
 # Q1		DONE
 # Q2		DONE
