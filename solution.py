@@ -135,8 +135,8 @@ def get_test_errors(banknote):
 		hard_p_err.append(er.hard_parzen(val))
 		soft_p_err.append(er.soft_parzen(val))
 
-	h_star = hyperparam[np.argmin(hard_p_err)]	
-	s_star = hyperparam[np.argmin(soft_p_err)]
+	h_star = np.argmin(hard_p_err)
+	s_star = np.argmin(soft_p_err)
 
 	return [h_star, s_star]
 
