@@ -172,15 +172,17 @@ def get_test_projection_error(banknote):
 
 		for val in hyperparam:
 			hard_p_err.append(er.hard_parzen(val))
-			# soft_p_err.append(er.soft_parzen(val))
+			soft_p_err.append(er.soft_parzen(val))
 
 		hard_p_val = np.append(hard_p_val, [hard_p_err], axis=0)
-		# soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
+		soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
+
+		print(soft_p_val)
 
 	return (hard_p_val, soft_p_val)
 
 
-print(get_test_errors(banknote))
+print(get_test_projection_error(banknote))
 
 
 # TODO:
@@ -193,5 +195,5 @@ print(get_test_errors(banknote))
 # Q6		DONE
 # Q7 report		
 # Q8		DONE
-# Q9		DONE (partial)
+# Q9		DONE
 # Q9 report		
