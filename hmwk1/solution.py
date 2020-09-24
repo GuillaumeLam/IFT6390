@@ -53,17 +53,37 @@ class HardParzen:
 		return Y_test
 
 
-# for new data points, take weighted vote of all data points with dist as weight factor ie. closer is weighted more 
 class SoftRBFParzen:
 	def __init__(self, sigma):
 		self.sigma  = sigma
 
 	def train(self, train_inputs, train_labels):
 		self.label_list = np.unique(train_labels)
-		pass
+		self.train_data = np.append(np.array(train_inputs), np.transpose(np.array([train_labels])), axis=1)
 
 	def compute_predictions(self, test_data):
-		pass
+		Y_test = []
+		for X_test in test_data:
+			kernel_dist = []
+			for point in self.train_data:
+				dist = np.linalg.norm(point[:-1]-X_test)
+
+				rbf_w = np.exp(-dist**2/(2*self.sigma**2))
+
+				if point[-1] == 0:
+					kernel_dist.append((rbf_w, -1))
+				else: 
+					kernel_dist.append((rbf_w, point[-1]))
+
+			w_y_sum = sum(w*y for w, y in kernel_dist)
+			w_sum = sum(w for w, _ in kernel_dist)
+
+			if w_y_sum/w_sum > 0:
+				Y_test.append(1)
+			else:
+				Y_test.append(0)
+
+		return Y_test
 
 
 def split_dataset(banknote):
@@ -130,20 +150,6 @@ def random_projections(X, A):
 	return proj_X
 
 
-
-X = np.array([
-		[1, 2, 3, 4]
-	])
-
-A = np.array([
-		[1, 2],
-		[1, 2],
-		[1, 2],
-		[1, 2]
-	])
-
-# print(random_projections(X, A))
-
 def get_test_projection_error(banknote):
 	A = np.random.normal(0, 1, size=(4, 2))
 
@@ -172,19 +178,36 @@ def get_test_projection_error(banknote):
 		hard_p_val = np.append(hard_p_val, [hard_p_err], axis=0)
 		# soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
 
-		print('progress: '+ str(i+1) +'/500='+ str((i+1)/500) +'%')
-		print(hard_p_val, hard_p_val.shape)
-
 	return (hard_p_val, soft_p_val)
 
-print(get_test_projection_error(banknote))
 
+X = [
+	[1,2,3],
+	[1,3,3],
+	[1,2,4],
+	[4,5,7],
+	[4,5,6]
+]
+Y = [0,0,0,1,1]
+
+p = SoftRBFParzen(3)
+p.train(X, Y)
+
+X_test = [
+	[0,2,4],
+	[5,6,7],
+	[3,4,5],
+	[9,7,10],
+	[20,2,15]
+]
+
+print(p.compute_predictions(X_test)) 
 
 
 # TODO:
 # Q1		DONE
 # Q2		DONE
-# Q3
+# Q3		DONE
 # Q4		DONE
 # Q5		DONE
 # Q5 report
