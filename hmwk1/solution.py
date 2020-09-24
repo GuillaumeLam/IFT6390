@@ -132,10 +132,6 @@ def random_projections(X, A):
 
 
 X = np.array([
-		[1, 2, 3, 4],
-		[1, 2, 3, 4],
-		[1, 2, 3, 4],
-		[1, 2, 3, 4],
 		[1, 2, 3, 4]
 	])
 
@@ -146,7 +142,44 @@ A = np.array([
 		[1, 2]
 	])
 
-print(random_projections(X, A))
+# print(random_projections(X, A))
+
+def get_test_projection_error(banknote):
+	A = np.random.normal(0, 1, size=(4, 2))
+
+	hyperparam = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 1, 3, 10, 20]
+
+	hard_p_val = np.empty((0,10), float)
+	soft_p_val = np.empty((0,10), float)
+
+	for i in range(500):
+		A = np.random.normal(0, 1, size=(4, 2))
+		proj_banknote = np.array(random_projections(banknote[:,:-1], A))
+
+		proj_banknote = np.append(proj_banknote, np.transpose([banknote[:,-1]]), axis=1)
+
+		train, val, test = split_dataset(proj_banknote)
+
+		er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(val)[:,:-1], np.array(val)[:,-1])
+
+		hard_p_err = []
+		soft_p_err = []
+
+		for val in hyperparam:
+			hard_p_err.append(er.hard_parzen(val))
+			# soft_p_err.append(er.soft_parzen(val))
+
+		hard_p_val = np.append(hard_p_val, [hard_p_err], axis=0)
+		# soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
+
+		print('progress: '+ str(i+1) +'/500='+ str((i+1)/500) +'%')
+		print(hard_p_val, hard_p_val.shape)
+
+	return (hard_p_val, soft_p_val)
+
+print(get_test_projection_error(banknote))
+
+
 
 # TODO:
 # Q1		DONE
@@ -158,4 +191,5 @@ print(random_projections(X, A))
 # Q6		DONE (partial)
 # Q7 report		
 # Q8		DONE
-# Q9		
+# Q9		DONE (partial)
+# Q9 report		
