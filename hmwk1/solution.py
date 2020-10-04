@@ -80,10 +80,10 @@ class SoftRBFParzen:
 
 
 def split_dataset(banknote):
-	train = [line for i, line in enumerate(banknote) if (i%5 == 0 or i%5 == 1 or i%5 == 2)]
-	val = [line for i, line in enumerate(banknote) if (i%5 == 3)]
-	test = [line for i, line in enumerate(banknote) if (i%5 == 4)]
-	return train,val,test 
+	train = np.array([line for i, line in enumerate(banknote) if (i%5 == 0 or i%5 == 1 or i%5 == 2)])
+	val = np.array([line for i, line in enumerate(banknote) if (i%5 == 3)])
+	test = np.array([line for i, line in enumerate(banknote) if (i%5 == 4)])
+	return train, val, test
 
 
 class ErrorRate:
@@ -128,12 +128,12 @@ def get_test_errors(banknote):
 		hard_p_err.append(er.hard_parzen(val))
 		soft_p_err.append(er.soft_parzen(val))
 
-	# soft_p_err = list(set(soft_p_err)).remove(0)
+	h_star = hyperparam[np.argmin(hard_p_err)]
+	s_star = hyperparam[np.argmin(soft_p_err)]
 
-	h_star = hard_p_err[np.argmin(hard_p_err)]
-	s_star = soft_p_err[np.argmin(soft_p_err)]
+	er = ErrorRate(np.array(train)[:,:-1], np.array(train)[:,-1], np.array(test)[:,:-1], np.array(test)[:,-1])
 
-	return [h_star, s_star]
+	return [er.hard_parzen(h_star), er.soft_parzen(s_star)]
 
 def random_projections(X, A):
 	proj_X = np.empty((0,2), int)
@@ -173,6 +173,8 @@ def get_test_projection_error(banknote):
 		soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
 
 	return (hard_p_val, soft_p_val)
+
+print(get_test_errors(banknote))
 
 
 # TODO:
