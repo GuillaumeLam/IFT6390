@@ -64,25 +64,18 @@ class SoftRBFParzen:
 	def compute_predictions(self, test_data):
 		Y_test = []
 		for X_test in test_data:
-			kernel_dist = []
+			kernel_dist = {}
 			for point in self.train_data:
 				dist = np.linalg.norm(point[:-1]-X_test)
 
 				rbf_w = np.exp(-dist**2/(2*self.sigma**2))
 
-				if point[-1] == 0:
-					kernel_dist.append((rbf_w, -1))
-				else: 
-					kernel_dist.append((rbf_w, point[-1]))
+				if point[-1] in kernel_dist:
+					kernel_dist[point[-1]] += rbf_w
+				else:
+					kernel_dist[point[-1]] = rbf_w
 
-			w_y_sum = sum(w*y for w, y in kernel_dist)
-			w_sum = sum(w for w, _ in kernel_dist)
-
-			if not w_sum == 0 and w_y_sum/w_sum > 0:
-				Y_test.append(1)
-			else:
-				Y_test.append(0)
-
+			Y_test.append(max(kernel_dist, key=kernel_dist.get))
 		return Y_test
 
 
@@ -135,6 +128,8 @@ def get_test_errors(banknote):
 		hard_p_err.append(er.hard_parzen(val))
 		soft_p_err.append(er.soft_parzen(val))
 
+	# soft_p_err = list(set(soft_p_err)).remove(0)
+
 	h_star = hard_p_err[np.argmin(hard_p_err)]
 	s_star = soft_p_err[np.argmin(soft_p_err)]
 
@@ -177,11 +172,8 @@ def get_test_projection_error(banknote):
 		hard_p_val = np.append(hard_p_val, [hard_p_err], axis=0)
 		soft_p_val = np.append(soft_p_val, [soft_p_err], axis=0)
 
-		print(soft_p_val)
-
 	return (hard_p_val, soft_p_val)
 
-print(get_test_errors(banknote))
 
 # TODO:
 # Q1		DONE
