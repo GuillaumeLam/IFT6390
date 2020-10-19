@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pandas = "*"
+scipy = "*"
+matplotlib = "*"
+sklearn = "*"
+nltk = "*"
+contractions = "*"
+textsearch = "*"
+gensim = "*"
+numpy = "==1.16.4"
+ipykernel = "*"
+tensorflow = "==1.14.0"
+
+[requires]
+python_version = "3.5"
